@@ -1,6 +1,6 @@
 name: This is a test
 
-on: push
+on: workflow_dispatch
 
 jobs:
   echo-hello:
