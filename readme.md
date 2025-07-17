@@ -1,6 +1,8 @@
 This is a test file as a start of learning the GITHUB ACTIONS and GITLAB
 as part of CI / CD learning
 
+Da
+
 Since I finished with dockerizing application using AWS ECS and EC2 with EC loader, starting the CI/CD subject to finish what would be a the final step for a full-stack
 developer
 
