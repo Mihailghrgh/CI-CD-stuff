@@ -1,6 +1,6 @@
 name: 04 - Using action
 
-on: push
+on: workflow_dispatch
 
 jobs:
   build:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Printing Folders
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
