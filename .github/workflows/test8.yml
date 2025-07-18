@@ -32,9 +32,16 @@ jobs:
         env:
           MY_OVERWRITTEN_VAR: "overwritten 1"
         run: |
-          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}}"
-          echo "My job var ${{env.MY_JOB_VAR}}}"
+          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}"
+          echo "My job var ${{env.MY_JOB_VAR}}"
       - name: Print ENV Variables
         run: |
-          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}}"
-          echo "My job var ${{env.MY_JOB_VAR}}}"
+          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}"
+          echo "My job var ${{env.MY_JOB_VAR}}"
+  echo-data-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print env
+        run: |
+          echo "Workflow ENV: $MY_OVERWRITTEN_VAR"
+          echo "Overwritten ENV: $MY_OVERWRITTEN_VAR"
