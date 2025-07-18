@@ -1,10 +1,9 @@
 name: 09 - Using Expression and If
 
-run-name: 09 - Using Expression | Debug - ${{inputs.debug && 'ON' || 'OF'}}
+run-name: 09 - Using Expression | Debug - ${{inputs.debug && 'ON' || 'OFF'}}
 
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       debug:
