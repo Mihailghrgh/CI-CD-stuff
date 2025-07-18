@@ -1,17 +1,20 @@
 name: 07 - Contexts
 run-name: 07 - Context | DEBUG - ${{inputs.debug}}
 on:
-    push:
-    workflow_dispatch:
-        inputs:
-          debug:
-            description: Debugging Input 
-            type: boolean
-            default: false
+  push:
+  workflow_dispatch:
+    inputs:
+      debug:
+        description: Debugging Input
+        type: boolean
+        default: false
 
 jobs:
   echo-data:
     runs-on: ubuntu-latest
+    env:
+      MY_JOB_VAR: "job"
+      MY_OVERWRITTEN_VAR: "overwritten 2"
     steps:
       - name: Display Information
         run: |
@@ -25,3 +28,13 @@ jobs:
       - name: Retrieve variable
         run: |
           echo 'Variable value: ${{vars.MY_VAR}}'
+      - name: Print ENV Variables
+        env:
+          MY_OVERWRITTEN_VAR: "overwritten 1"
+        run: |
+          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}}"
+          echo "My job var ${{env.MY_JOB_VAR}}}"
+      - name: Print ENV Variables
+        run: |
+          echo "My workflow var ${{env.MY_OVERWRITTEN_VAR}}}"
+          echo "My job var ${{env.MY_JOB_VAR}}}"
