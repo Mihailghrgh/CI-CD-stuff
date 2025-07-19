@@ -1,0 +1,63 @@
+name: 12 - Controlling execution of jobs
+
+on:
+  workflow_dispatch:
+    inputs:
+      pass-unit-tests:
+        type: boolean
+        description: Weather the unit test will pass or not
+        default: true
+
+jobs:
+  lint_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint and build
+        run: |
+          echo "npm run lint"
+          echo "npm run format:check"
+          echo "npm run tsc:check"
+          echo "npm run build"
+          echo "docker build . -t frontend:latest"
+          echo "docker push frontend:latest"
+
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Running unit test
+        run: |
+          echo "npm test"
+          echo "npm jest"
+      - name: Failing Tests
+        if: ${{ !inputs.pass-unit-tests}}
+        run: exit 1
+  deploy_non_prod:
+    runs-on: ubuntu-latest
+    needs:
+      - lint_build
+      - unit_test
+    steps:
+      - name: Deploying to non prod
+        run: |
+          echo "docker pull frontend:latest"
+          echo "docker-compose up -d"
+          echo "Deploying to non prod..."
+          echo "vercel --prod=false --token=$SSH13322332"
+  e2e_test:
+    runs-on: ubuntu-latest
+    needs:
+      - lint_build
+      - unit_test
+    steps:
+      - name: Running e2e tests before deployment
+        run: |
+          echo "npx cypress run"
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs:
+      - lint_build
+      - unit_test
+    steps:
+      - name: Deploying to production
+        run: |
+          ssh -i amazon-ssh.pem ec2-user@xx.xxx.xx.xx
