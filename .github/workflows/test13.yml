@@ -1,0 +1,35 @@
+name: 13 - Testing Inputs
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        type: boolean
+        description: Skip deployment and only build output
+        default: false
+      target:
+        type: environment
+        required: true
+        description: Which environment the workflow will target
+      version:
+        description: Which version for deployment to choose
+        type: choice
+        options:
+          - v1
+          - v2
+          - v3
+        default: v3
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        run: echo "Building from ${{inputs.target}}"
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{!inputs.dry-run}}
+    environment: ${{inputs.target}}
+    steps:
+      - name: Deploying
+        run: echo "Deploying to ${{inputs.target}}"
