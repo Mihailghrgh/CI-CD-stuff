@@ -57,6 +57,7 @@ jobs:
     needs:
       - lint_build
       - unit_test
+      - deploy_non_prod
     steps:
       - name: Deploying to production
         run: |
