@@ -3,7 +3,7 @@ name: 15 - Caching in YAML
 on:
   workflow_dispatch:
     inputs:
-      use-chaching:
+      use-cache:
         description: Weather to execute cache steps
         type: boolean
         default: true
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: 13-caching/react-app
+        working-directory: ./13-caching/react-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
