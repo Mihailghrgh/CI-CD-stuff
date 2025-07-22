@@ -1,0 +1,20 @@
+name: 17 - Testing Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      target-env:
+        description: Choosing the working environment
+        type: environment
+        default: staging
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    environment: ${{inputs.target-env}}
+    env:
+      my-env-value: ${{vars.MY_ENV_VALUE || 'default value'}}
+    steps:
+      - name: Echo Vars
+        run: |
+          echo "ENV variable: ${{env.my-env-value}}"
