@@ -1,6 +1,7 @@
 name: 04 - Using action
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,7 +20,7 @@ jobs:
         run: npm ci
       - name: Run Unit test
         run: npm run test
-        
+
     # 0. Checkout the code from the repository
     # 1. Install deps of out react applications from node module "npm install"
     # 2. Execute LINT test and build testing
