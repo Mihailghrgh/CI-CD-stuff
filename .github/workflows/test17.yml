@@ -1,4 +1,5 @@
 name: 17 - Testing Environment
+run-name: 17 - Testing Environment | env ${{inputs.target-env}}
 
 on:
   workflow_dispatch:
