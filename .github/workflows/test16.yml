@@ -48,3 +48,6 @@ jobs:
         include:
           - color: red
             shape: triangle
+    steps:
+      - name: Dummy Test
+        run: echo "dummy step"
