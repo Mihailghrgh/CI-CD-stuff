@@ -16,7 +16,8 @@ jobs:
     steps:
       - name: Setup Node
         uses: actions/setup-node@v3
-        with: ${{matrix.node-version}}
+        with:
+          node-version: ${{matrix.node-version}}
       - name: Perform Tests
         run: |
           echo "Running npm run test && npm run jest "
