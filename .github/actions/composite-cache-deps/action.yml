@@ -10,6 +10,10 @@ inputs:
     description: The working directory of the applications
     default: .
     required: false
+  target_env:
+    description: The target environment for the action to execute in
+    default: dev
+    required: false
 
 runs:
   using: composite
