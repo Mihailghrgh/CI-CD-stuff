@@ -19,7 +19,7 @@ runs:
       with:
         node_version: ${{inputs.node_version}}
     - name: Cache dependencies
-      uses: action/cache@v3
+      uses: actions/cache@v3
       id: cache
       with:
         path: ${{inputs.working_dir}}/node_modules
