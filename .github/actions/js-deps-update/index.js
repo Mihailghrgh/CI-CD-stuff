@@ -30,7 +30,7 @@ async function run() {
     return;
   }
 
-  if (!validateDirectoryName({ dirName: workingDir })) {
+  if (!validateDirectoryName({ dirName: workingDirectory })) {
     core.setFailed(
       "Invalid working directory name. Directory names can only contain characters, numbers, hyphens, underscores and forward slashes."
     );
