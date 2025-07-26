@@ -11,10 +11,10 @@ async function run() {
   core.setSecret(githubToken);
 
   const validateBranchName = ({ branchName }) =>
-    /^[a-sA-Z0-9_\-\.\/]+$/.test(branchName);
+    /^[a-zA-Z0-9_\-\.\/]+$/.test(branchName);
 
   const validateDirectoryName = ({ dirName }) =>
-    /^[a-sA-Z0-9_\-\.\/]+$/.test(dirName);
+    /^[a-zA-Z0-9_\-\.\/]+$/.test(dirName);
 
   if (!validateBranchName({ branchName: baseBranch })) {
     core.setFailed(
@@ -57,7 +57,7 @@ async function run() {
     core.info("[js-deps-update] ==> No updates at this time!");
   }
 
-  
+
   /*
     This actions is used to update the npm dependencies in the package.json Yay
 
