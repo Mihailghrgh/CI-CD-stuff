@@ -19,7 +19,6 @@ on:
       gh-token:
         description: Auth token for repository access when committing changes
         type: string
-        required: true
 
 jobs:
   dependency-update:
