@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  working-directory: ../../../15-caching/react-app/package-lock.json
+  working-directory: ./15-caching/react-app/package-lock.json
 
 jobs:
   build:
