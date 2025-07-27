@@ -60,8 +60,14 @@ async function run() {
       "[js-deps-update] ==> Changes detected in package.json, there are updates available!"
     );
 
-    await exec.exec("git config user.name ==> 'test Name'");
-    await exec.exec("git config user.email ==> 'test@gmail.com' ");
+    await exec.exec(`git config --global user.name "Mihail" `, [], {
+      ...commonExecOptions,
+    });
+    await exec.exec(
+      `git config --global user.email "mihailghrgh@gmail.com" `,
+      [],
+      { ...commonExecOptions }
+    );
     await exec.exec(`git checkout -b ${targetBranch}`, [], {
       ...commonExecOptions,
     });
