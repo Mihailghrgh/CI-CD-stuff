@@ -1,12 +1,17 @@
 const core = require("@actions/core");
 const exec = require("@actions/exec");
+const github = require("@actions/github");
 
 async function run() {
-  const baseBranch = core.getInput("base-branch");
-  const targetBranch = core.getInput("target-branch");
-  const githubToken = core.getInput("github-token");
-  const workingDirectory = core.getInput("working-directory") || ".";
-  const debugInput = core.getInput("debug") === "true";
+  const baseBranch = core.getInput("base-branch", { required: true });
+  const targetBranch = core.getInput("target-branch", { required: true });
+  const githubToken = core.getInput("github-token", { required: true });
+  const workingDirectory = core.getInput("working-directory", {
+    required: true,
+  });
+  const debugInput = core.getInput("debug");
+
+  const commonExecOptions = { cwd: workingDirectory };
 
   core.setSecret(githubToken);
 
@@ -40,25 +45,61 @@ async function run() {
   core.info(`[js-deps-update] Base branch is: ${baseBranch}`);
   core.info(`[js-deps-update] Working Directory is: ${workingDirectory}`);
 
-  await exec.exec("npm update", [], { cwd: workingDirectory });
+  await exec.exec("npm update", [], ...commonExecOptions);
 
-  const gitStatus = await exec.getExecOutput("git status -s package.json", [], {
-    cwd: workingDirectory,
-  });
+  const gitStatus = await exec.getExecOutput(
+    "git status -s package.json",
+    [],
+    ...commonExecOptions
+  );
 
   if (gitStatus.stdout.length > 0) {
     core.info(
       "[js-deps-update] ==> Changes detected in package.json, there are updates available!"
     );
 
-    await exec.exec("git config user.name 'GitHub Actions'");
-    await exec.exec("git config user.email ");
-  } else {
-    core.info("[js-deps-update] ==> No updates at this time!");
-  }
+    await exec.exec("git config user.name ==> 'test Name'");
+    await exec.exec("git config user.email ==> 'test@gmail.com' ");
+    await exec.exec(
+      `git checkout -b ${targetBranch}`,
+      [],
+      ...commonExecOptions
+    );
+    await exec.exec(
+      `git add package.json package-lock.json`,
+      [],
+      ...commonExecOptions
+    );
 
+    await exec.exec(
+      `git commit -m "Updated npm dependencies for ${baseBranch}"`,
+      [],
+      ...commonExecOptions
+    );
 
-  /*
+    await exec.exec(
+      `git push -u origin ${targetBranch} --force`,
+      [],
+      ...commonExecOptions
+    );
+
+    const octokit = github.getOctokit(githubToken);
+
+    try {
+      await octokit.rest.pulls.create({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        title: `Update npm dependencies`,
+        body: `This pull request updated npm packages in the \`package.json\` file.`,
+        base: baseBranch,
+        head: targetBranch,
+      });
+    } catch (error) {
+      core.warning(`Error creating pull request: ${error.message}`, `${error}`);
+      core.setFailed(`Failed to create pull request: ${error.message}`);
+    }
+
+    /*
     This actions is used to update the npm dependencies in the package.json Yay
 
     1. base branch for, which to check for updates and parsing Inputs
@@ -75,7 +116,8 @@ async function run() {
 
     6. Otherwise , conclude the custom action
     */
-  core.info("Starting the js-deps-update action ///");
+    core.info("Starting the js-deps-update action ///");
+  }
 }
 
 run();

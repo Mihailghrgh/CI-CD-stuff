@@ -13,9 +13,13 @@ on:
         type: string
         default: update-deps
       working-directory:
-          description: The working directory of the project to check the dependency updates
-          type: string
-          default: ./15-caching/react-app
+        description: The working directory of the project to check the dependency updates
+        type: string
+        default: ./15-caching/react-app
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   dependency-update:
@@ -25,7 +29,7 @@ jobs:
       - name: Check for dependencies update
         uses: ./.github/actions/js-deps-update
         with:
-            base-branch: ${{ inputs.base-branch }}
-            target-branch: ${{ inputs.target-branch }}
-            working-directory: ${{ inputs.working-directory }}
-            gh-token: ${{ inputs.gh-token }}
+          base-branch: ${{ inputs.base-branch }}
+          target-branch: ${{ inputs.target-branch }}
+          working-directory: ${{ inputs.working-directory }}
+          gh-token: ${{secrets.GITHUB_TOKEN}}
