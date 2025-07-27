@@ -15,14 +15,13 @@ inputs:
     description: The working directory of the project to check the dependency updates
     default: .
     required: true
-  gh-token:
+  github-token:
     description: Auth token for repository access when committing changes
     required: true
   debug:
     description: Weather to enable debug mode
-    default: 'false'
+    default: "false"
 
 runs:
   using: node20
   main: index.js
-  
