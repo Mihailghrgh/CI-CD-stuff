@@ -16,6 +16,9 @@ on:
         description: The working directory of the project to check the dependency updates
         type: string
         default: ./15-caching/react-app
+      github-token:
+        description: Auth token for repository access when committing changes
+        required: true
 
 permissions:
   contents: write
