@@ -47,9 +47,13 @@ async function run() {
 
   await exec.exec("npm update", [], { ...commonExecOptions });
 
-  const gitStatus = await exec.getExecOutput("git status -s package.json", [], {
-    ...commonExecOptions,
-  });
+  const gitStatus = await exec.getExecOutput(
+    "git status -s package.json package-lock.json",
+    [],
+    {
+      ...commonExecOptions,
+    }
+  );
 
   if (gitStatus.stdout.length > 0) {
     core.info(
@@ -111,6 +115,10 @@ async function run() {
     6. Otherwise , conclude the custom action
     */
     core.info("Starting the js-deps-update action ///");
+  } else {
+    core.info(
+      "[js-deps-update] ===> No changes detected in package.json, no updates available."
+    );
   }
 }
 
