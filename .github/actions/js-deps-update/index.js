@@ -45,13 +45,11 @@ async function run() {
   core.info(`[js-deps-update] Base branch is: ${baseBranch}`);
   core.info(`[js-deps-update] Working Directory is: ${workingDirectory}`);
 
-  await exec.exec("npm update", [], ...commonExecOptions);
+  await exec.exec("npm update", [], { ...commonExecOptions });
 
-  const gitStatus = await exec.getExecOutput(
-    "git status -s package.json",
-    [],
-    ...commonExecOptions
-  );
+  const gitStatus = await exec.getExecOutput("git status -s package.json", [], {
+    ...commonExecOptions,
+  });
 
   if (gitStatus.stdout.length > 0) {
     core.info(
@@ -60,28 +58,24 @@ async function run() {
 
     await exec.exec("git config user.name ==> 'test Name'");
     await exec.exec("git config user.email ==> 'test@gmail.com' ");
-    await exec.exec(
-      `git checkout -b ${targetBranch}`,
-      [],
-      ...commonExecOptions
-    );
-    await exec.exec(
-      `git add package.json package-lock.json`,
-      [],
-      ...commonExecOptions
-    );
+    await exec.exec(`git checkout -b ${targetBranch}`, [], {
+      ...commonExecOptions,
+    });
+    await exec.exec(`git add package.json package-lock.json`, [], {
+      ...commonExecOptions,
+    });
 
     await exec.exec(
       `git commit -m "Updated npm dependencies for ${baseBranch}"`,
       [],
-      ...commonExecOptions
+      {
+        ...commonExecOptions,
+      }
     );
 
-    await exec.exec(
-      `git push -u origin ${targetBranch} --force`,
-      [],
-      ...commonExecOptions
-    );
+    await exec.exec(`git push -u origin ${targetBranch} --force`, [], {
+      ...commonExecOptions,
+    });
 
     const octokit = github.getOctokit(githubToken);
 
