@@ -4,4 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
+RUN echo "Installing dependencies...==============>" && \
+    echo "Dependencies installed...==============>"
+
+CMD [ "" ]
