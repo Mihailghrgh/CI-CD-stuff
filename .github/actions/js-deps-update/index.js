@@ -2,6 +2,26 @@ const core = require("@actions/core");
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 
+const validateBranchName = ({ branchName }) =>
+  /^[a-zA-Z0-9_\-\.\/]+$/.test(branchName);
+
+const validateDirectoryName = ({ dirName }) =>
+  /^[a-zA-Z0-9_\-\.\/]+$/.test(dirName);
+
+const setupLogger = ({ debug, prefix } = { debug: false, prefix: "" }) => ({
+  debug: (message) => {
+    if (debug) {
+      core.debug(message);
+    }
+  },
+  info: (message) => {
+    core.info(`${prefix}${prefix ? " : " : ""}${message}`);
+  },
+  warn: (message) => {
+    core.error(`${prefix}${prefix ? " : " : ""}${message}`);
+  },
+});
+
 async function run() {
   const baseBranch = core.getInput("base-branch", { required: true });
   const targetBranch = core.getInput("target-branch", { required: true });
@@ -9,17 +29,16 @@ async function run() {
   const workingDirectory = core.getInput("working-directory", {
     required: true,
   });
-  const debugInput = core.getInput("debug");
+  const debug = core.getInput("debug");
+  const logger = setupLogger({ debug, prefix: "[js-deps-update]" });
 
   const commonExecOptions = { cwd: workingDirectory };
 
   core.setSecret(githubToken);
 
-  const validateBranchName = ({ branchName }) =>
-    /^[a-zA-Z0-9_\-\.\/]+$/.test(branchName);
-
-  const validateDirectoryName = ({ dirName }) =>
-    /^[a-zA-Z0-9_\-\.\/]+$/.test(dirName);
+  logger.debug(
+    "validate inputs = base-branch, target-branch, working-directory"
+  );
 
   if (!validateBranchName({ branchName: baseBranch })) {
     core.setFailed(
@@ -42,8 +61,13 @@ async function run() {
     return;
   }
 
-  core.info(`[js-deps-update] Base branch is: ${baseBranch}`);
-  core.info(`[js-deps-update] Working Directory is: ${workingDirectory}`);
+  // Debug log for Inputs
+  logger.debug(`Base branch is ${baseBranch}`);
+  logger.debug(`Target branch is ${targetBranch}`);
+  logger.debug(`Working directory is ${workingDirectory}`);
+
+  core.info(`[js-deps-update] ===> Base branch is: ${baseBranch}`);
+  core.info(`[js-deps-update] ===> Working Directory is: ${workingDirectory}`);
 
   await exec.exec("npm update", [], { ...commonExecOptions });
 
@@ -56,6 +80,11 @@ async function run() {
   );
 
   if (gitStatus.stdout.length > 0) {
+    // Just for debugging purposes
+    logger.debug(
+      "[js-deps-update] ==> Changes detected in package.json, there are updates available!"
+    );
+    // Just for debugging purposes
     core.info(
       "[js-deps-update] ==> Changes detected in package.json, there are updates available!"
     );
@@ -120,7 +149,6 @@ async function run() {
 
     6. Otherwise , conclude the custom action
     */
-    core.info("Starting the js-deps-update action ///");
   } else {
     core.info(
       "[js-deps-update] ===> No changes detected in package.json, no updates available."
