@@ -1,0 +1,19 @@
+#node modules
+
+node_modules
+node_modules/**
+node_modules/**/*
+
+#docker ignore
+.dockerignore
+#dockerfile
+Dockerfile
+
+#gitignore
+.gitignore
+
+#github actions
+.github
+
+#environment files
+.env

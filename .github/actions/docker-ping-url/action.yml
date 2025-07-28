@@ -1,0 +1,20 @@
+name: Docker - Ping URL
+description: This action pings a specified URL to check if the Docker service is running. If response is not 200 until then, fails the action.
+
+inputs:
+  URL:
+    description: The URL to ping
+    required: true
+  max-trials:
+    description: The maximum number of ping attempts before failing
+    default: '10'
+    required: false
+  delay:
+    description: The delay in seconds between ping attempts
+    default: '5'
+    required: false
+
+runs:
+  using: docker
+  image: Dockerfile
+  
