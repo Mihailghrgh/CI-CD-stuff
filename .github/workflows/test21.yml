@@ -1,0 +1,39 @@
+name: 21 - Reusable Workflow for Testing
+
+on:
+  workflow_call:
+    inputs:
+      target_directory:
+        description: "Name of the test to run"
+        required: true
+        type: string
+        default: main
+    outputs:
+        build-status:
+            description: "Status of the build process"
+            value: ${{jobs.test_job.outputs.build-status}}
+        url-status:
+            description: "URL of the build process"
+            value: ${{jobs.test_job.outputs.build-status}}
+
+jobs:
+  test_job:
+    runs-on: ubuntu-latest
+    outputs:
+        build-status: ${{steps.build.outputs.build-status}}
+        url: ${{steps.deploy.outputs.url}}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Build
+        id: build
+        run: |
+          echo "Running test: ${{ inputs.test_name }}"
+          # Simulate a build step
+          echo "build-status=success" >> $GITHUB_OUTPUT
+      - name: Deploy
+        id: deploy
+        run: |
+          echo "Deploying artifacts for test: ${{ inputs.test_name }}"
+          # Simulate deployment step
+          echo "url=https://www.google.com" >> $GITHUB_OUTPUT

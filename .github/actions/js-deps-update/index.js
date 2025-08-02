@@ -97,6 +97,10 @@ async function run() {
       [],
       { ...commonExecOptions }
     );
+
+    await exec.e
+
+  
     await exec.exec(`git checkout -b ${targetBranch}`, [], {
       ...commonExecOptions,
     });
