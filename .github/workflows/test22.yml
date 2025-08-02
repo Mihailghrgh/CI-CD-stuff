@@ -1,0 +1,37 @@
+name: 22 - Managing concurrency
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        type: string
+        default: https://www.google.com
+        description: Default URL if not provided
+      max_trials:
+        type: number
+        default: 1
+        description: Default number of max tries to ping
+      delay:
+        type: number
+        default: 1
+        description: Default delay time between pinging url
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ping
+        id: ping-url
+        uses: ./.github/actions/docker-ping-url
+        with:
+          url: ${{inputs.url}}
+          max_trials: ${{inputs.max_trials}}
+          delay: ${{inputs.delay}}
+      - name: Print the output from ping URL
+        run: |
+          echo "URL reachable ${{steps.ping-url.outputs.url-reachable}}"
+
